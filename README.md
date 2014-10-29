@@ -19,6 +19,18 @@
 compile 'in.srain.cube:grid-view-with-header-footer:1.0.1'
 ```
 
+### Usage
+
+```java
+GridViewWithHeaderAndFooter gridView = (GridViewWithHeaderAndFooter) v.findViewById(R.id.ly_image_list_grid);
+
+LayoutInflater layoutInflater = LayoutInflater.from(this);
+View headerView = layoutInflater.inflate(R.layout.test_header_view, null);
+View footerView = layoutInflater.inflate(R.layout.test_footer_view, null);
+gridView.addHeaderView(headerView);
+gridView.addFooterView(footerView);
+    ```
+
 
 ### License
 
