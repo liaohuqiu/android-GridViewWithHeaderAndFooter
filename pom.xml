@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
+    <groupId>in.srain.cube</groupId>
+    <artifactId>grid-view-with-header-footer</artifactId>
+    <packaging>jar</packaging>
+    <name>GridViewWithHeaderAndFooter</name>
+    <version>1.0.1</version>
+
+    <description>GridView with Header and Footer</description>
+    <url>https://github.com/recruit-mp/android-HeaderFooterGridView</url>
+    <inceptionYear>2014</inceptionYear>
+
+    <scm>
+        <url>https://github.com/etao-open-source/cube-sdk</url>
+        <connection>scm:git:git@github.com:recruit-mp/android-HeaderFooterGridView.git</connection>
+        <developerConnection>scm:git:git@github.com:recruit-mp/android-HeaderFooterGridView.git</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Huqiu Liao</name>
+            <email>liaohuqiu@gmail.com</email>
+            <id>liaohuqiu</id>
+            <url>http://www.liaohuqiu.net</url>
+            <timezone>+8</timezone>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>Apache License Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>Huqiu Liao</name>
+        <url>http://www.liaohuqiu.net</url>
+    </organization>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/recruit-mp/android-HeaderFooterGridView/issues</url>
+    </issueManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+            <version>4.4.0</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <properties>
+        <android.maven.plugin.version>3.7.0</android.maven.plugin.version>
+        <android.compile.apilevel>16</android.compile.apilevel>
+    </properties>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <sourceDirectory>src</sourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                <artifactId>android-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <version>${android.maven.plugin.version}</version>
+                <configuration>
+                    <sdk>
+                        <path>${env.ANDROID_HOME}</path>
+                        <platform>${android.compile.apilevel}</platform>
+                    </sdk>
+                    <sign>
+                        <debug>false</debug>
+                    </sign>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
