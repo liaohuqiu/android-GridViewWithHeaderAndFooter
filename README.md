@@ -29,7 +29,7 @@ View headerView = layoutInflater.inflate(R.layout.test_header_view, null);
 View footerView = layoutInflater.inflate(R.layout.test_footer_view, null);
 gridView.addHeaderView(headerView);
 gridView.addFooterView(footerView);
-    ```
+```
 
 
 ### License
