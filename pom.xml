@@ -13,16 +13,16 @@
     <artifactId>grid-view-with-header-footer</artifactId>
     <packaging>jar</packaging>
     <name>GridViewWithHeaderAndFooter</name>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 
     <description>GridView with Header and Footer</description>
     <url>https://github.com/recruit-mp/android-HeaderFooterGridView</url>
     <inceptionYear>2014</inceptionYear>
 
     <scm>
-        <url>https://github.com/etao-open-source/cube-sdk</url>
-        <connection>scm:git:git@github.com:recruit-mp/android-HeaderFooterGridView.git</connection>
-        <developerConnection>scm:git:git@github.com:recruit-mp/android-HeaderFooterGridView.git</developerConnection>
+        <url>https://github.com/liaohuqiu/android-GridViewWithHeaderAndFooter</url>
+        <connection>scm:git:git@github.com:liaohuqiu/android-GridViewWithHeaderAndFooter.git</connection>
+        <developerConnection>scm:git:git@github.com:liaohuqiu/android-GridViewWithHeaderAndFooter.git</developerConnection>
     </scm>
 
     <developers>
@@ -53,7 +53,7 @@
 
     <issueManagement>
         <system>GitHub Issues</system>
-        <url>https://github.com/recruit-mp/android-HeaderFooterGridView/issues</url>
+        <url>https://github.com/liaohuqiu/android-GridViewWithHeaderAndFooter/issues</url>
     </issueManagement>
 
     <dependencies>
