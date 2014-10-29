@@ -1,6 +1,6 @@
 ### GridView with Header and Footer
 
-[!Screen Shot](https://raw.githubusercontent.com/liaohuqiu/android-GridViewWithHeaderAndFooter/master/screen-shot.png)
+![Screen Shot](https://raw.githubusercontent.com/liaohuqiu/android-GridViewWithHeaderAndFooter/master/screen-shot.png)
 
 #### Marven
 
