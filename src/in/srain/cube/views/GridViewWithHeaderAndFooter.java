@@ -180,6 +180,10 @@ public class GridViewWithHeaderAndFooter extends GridView {
         return mHeaderViewInfos.size();
     }
 
+    public int getFooterViewCount() {
+        return mFooterViewInfos.size();
+    }
+
     /**
      * Removes a previously-added header view.
      *
@@ -195,6 +199,26 @@ public class GridViewWithHeaderAndFooter extends GridView {
                 result = true;
             }
             removeFixedViewInfo(v, mHeaderViewInfos);
+            return result;
+        }
+        return false;
+    }
+
+    /**
+     * Removes a previously-added footer view.
+     *
+     * @param v The view to remove
+     * @return true if the view was removed, false if the view was not a header
+     * view
+     */
+    public boolean removeFooterView(View v) {
+        if (mFooterViewInfos.size() > 0) {
+            boolean result = false;
+            ListAdapter adapter = getAdapter();
+            if (adapter != null && ((HeaderViewGridAdapter) adapter).removeFooter(v)) {
+                result = true;
+            }
+            removeFixedViewInfo(v, mFooterViewInfos);
             return result;
         }
         return false;
@@ -225,6 +249,24 @@ public class GridViewWithHeaderAndFooter extends GridView {
                 }
             }
             return columns > 0 ? columns : AUTO_FIT;
+        }
+    }
+
+    public void tryToScrollToBottomSmoothly() {
+        int lastPos = getAdapter().getCount() - 1;
+        if (Build.VERSION.SDK_INT >= 11) {
+            smoothScrollToPositionFromTop(lastPos, 0);
+        } else {
+            setSelection(lastPos);
+        }
+    }
+
+    public void tryToScrollToBottomSmoothly(int duration) {
+        int lastPos = getAdapter().getCount() - 1;
+        if (Build.VERSION.SDK_INT >= 11) {
+            smoothScrollToPositionFromTop(lastPos, 0, duration);
+        } else {
+            setSelection(lastPos);
         }
     }
 
@@ -337,7 +379,22 @@ public class GridViewWithHeaderAndFooter extends GridView {
                 FixedViewInfo info = mHeaderViewInfos.get(i);
                 if (info.view == v) {
                     mHeaderViewInfos.remove(i);
-                    mAreAllFixedViewsSelectable = areAllListInfosSelectable(mHeaderViewInfos);
+                    mAreAllFixedViewsSelectable =
+                            areAllListInfosSelectable(mHeaderViewInfos) && areAllListInfosSelectable(mFooterViewInfos);
+                    mDataSetObservable.notifyChanged();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public boolean removeFooter(View v) {
+            for (int i = 0; i < mFooterViewInfos.size(); i++) {
+                FixedViewInfo info = mFooterViewInfos.get(i);
+                if (info.view == v) {
+                    mFooterViewInfos.remove(i);
+                    mAreAllFixedViewsSelectable =
+                            areAllListInfosSelectable(mHeaderViewInfos) && areAllListInfosSelectable(mFooterViewInfos);
                     mDataSetObservable.notifyChanged();
                     return true;
                 }

@@ -13,7 +13,7 @@
     <artifactId>grid-view-with-header-footer</artifactId>
     <packaging>jar</packaging>
     <name>GridViewWithHeaderAndFooter</name>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 
     <description>GridView with Header and Footer</description>
     <url>https://github.com/recruit-mp/android-HeaderFooterGridView</url>
