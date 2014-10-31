@@ -62,7 +62,7 @@ Apache 2
 
 ### contact or help
 
-Please free to contact me if there is any problem when using the libray.
+Please fell free to contact me if there is any problem when using the libray.
 
 * srain@php.net
 * twitter: https://twitter.com/liaohuqiu
