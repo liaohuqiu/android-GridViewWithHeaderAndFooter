@@ -59,3 +59,12 @@ mGridView.post(new Runnable() {
 ### License
 
 Apache 2
+
+### contact or help
+
+Please free to contact me if there is any problem when using the libray.
+
+(mailto:srain@php.net)
+twitter: https://twitter.com/liaohuqiu
+weibo: http://weibo.com/liaohuqiu
+QQ tribe: 271918140
