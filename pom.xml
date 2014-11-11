@@ -13,16 +13,17 @@
     <artifactId>grid-view-with-header-footer</artifactId>
     <packaging>jar</packaging>
     <name>GridViewWithHeaderAndFooter</name>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
 
     <description>GridView with Header and Footer</description>
-    <url>https://github.com/recruit-mp/android-HeaderFooterGridView</url>
+    <url>https://github.com/liaohuqiu/android-GridViewWithHeaderAndFooter</url>
     <inceptionYear>2014</inceptionYear>
 
     <scm>
         <url>https://github.com/liaohuqiu/android-GridViewWithHeaderAndFooter</url>
         <connection>scm:git:git@github.com:liaohuqiu/android-GridViewWithHeaderAndFooter.git</connection>
-        <developerConnection>scm:git:git@github.com:liaohuqiu/android-GridViewWithHeaderAndFooter.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:liaohuqiu/android-GridViewWithHeaderAndFooter.git
+        </developerConnection>
     </scm>
 
     <developers>
@@ -55,15 +56,6 @@
         <system>GitHub Issues</system>
         <url>https://github.com/liaohuqiu/android-GridViewWithHeaderAndFooter/issues</url>
     </issueManagement>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.google.android</groupId>
-            <artifactId>android</artifactId>
-            <version>4.4.0</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
 
     <properties>
         <android.maven.plugin.version>3.7.0</android.maven.plugin.version>

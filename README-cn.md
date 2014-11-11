@@ -1,8 +1,8 @@
-## [中文版文档](https://github.com/liaohuqiu/android-GridViewWithHeaderAndFooter/blob/master/README-cn.md)
-
 ### GridView with Header and Footer
 
 ![Screen Shot](https://raw.githubusercontent.com/liaohuqiu/android-GridViewWithHeaderAndFooter/master/screen-shot.png)
+
+只有一个文件，你可以将源代码放入你的项目中。另外项目发布到了Maven中央库，你可以通过`pom`或者`gradle`引入。
 
 #### Maven
 
@@ -21,7 +21,7 @@
 compile 'in.srain.cube:grid-view-with-header-footer:1.0.5'
 ```
 
-### Usage
+### 使用示例
 
 ```java
 GridViewWithHeaderAndFooter gridView = (GridViewWithHeaderAndFooter) v.findViewById(R.id.ly_image_list_grid);
@@ -33,9 +33,9 @@ gridView.addHeaderView(headerView);
 gridView.addFooterView(footerView);
 ```
 
-#### When scroll to bottom to load more data for GridView
+#### 滑到底部之后，加载更多
 
-since 1.0.4
+从`1.0.4`之后版本开始支持。
 
 ```
 public void tryToScrollToBottomSmoothly();
@@ -55,7 +55,7 @@ mGridView.post(new Runnable() {
 mGridView.postDelay(new Runnable() {
     @Override
     public void run() {
-    // load more data
+    // 处理加载更多
     }
 }, 150);
 ```
@@ -68,11 +68,11 @@ mGridView.postDelay(new Runnable() {
 
 Apache 2
 
-### contact or help
+### 联系方式 / 帮助支持
 
 Please fell free to contact me if there is any problem when using the library.
 
 * srain@php.net
 * twitter: https://twitter.com/liaohuqiu
-* weibo: http://weibo.com/liaohuqiu
-* QQ tribe: 271918140
+* 微博: http://weibo.com/liaohuqiu
+* QQ 群: 271918140
