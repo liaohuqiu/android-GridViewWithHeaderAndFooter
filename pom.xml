@@ -8,12 +8,19 @@
         <artifactId>oss-parent</artifactId>
         <version>7</version>
     </parent>
+    <!--
+    <parent>
+        <groupId>com.taobao</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.0.2</version>
+    </parent>
+    -->
 
     <groupId>in.srain.cube</groupId>
     <artifactId>grid-view-with-header-footer</artifactId>
     <packaging>jar</packaging>
     <name>GridViewWithHeaderAndFooter</name>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
 
     <description>GridView with Header and Footer</description>
     <url>https://github.com/liaohuqiu/android-GridViewWithHeaderAndFooter</url>
@@ -25,6 +32,14 @@
         <developerConnection>scm:git:git@github.com:liaohuqiu/android-GridViewWithHeaderAndFooter.git
         </developerConnection>
     </scm>
+    <dependencies>
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+            <version>4.1.1.4</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
     <developers>
         <developer>

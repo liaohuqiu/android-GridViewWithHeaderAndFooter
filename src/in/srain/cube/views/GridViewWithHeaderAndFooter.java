@@ -24,14 +24,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
  * A {@link GridView} that supports adding header rows in a
  * very similar way to {@link android.widget.ListView}.
  * See {@link GridViewWithHeaderAndFooter#addHeaderView(View, Object, boolean)}
+ * See {@link GridViewWithHeaderAndFooter#addFooterView(View, Object, boolean)}
  */
 public class GridViewWithHeaderAndFooter extends GridView {
+
+    /**
+     * This view holder will be set to be a tag of a place holder view to indicate that this view is a place holder view.
+     */
+    private static class ViewHolderTagForPlaceHolderView {
+
+    }
 
     /**
      * A class that represents a fixed view in a list, for example a header at the top
@@ -52,6 +61,8 @@ public class GridViewWithHeaderAndFooter extends GridView {
          */
         public boolean isSelectable;
     }
+
+    private int mNumColumns = AUTO_FIT;
 
     private ArrayList<FixedViewInfo> mHeaderViewInfos = new ArrayList<FixedViewInfo>();
     private ArrayList<FixedViewInfo> mFooterViewInfos = new ArrayList<FixedViewInfo>();
@@ -236,19 +247,19 @@ public class GridViewWithHeaderAndFooter extends GridView {
     }
 
     private int getNumColumnsCompatible() {
-        if (Build.VERSION.SDK_INT >= 11) {
-            return getNumColumns();
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            return super.getNumColumns();
         } else {
-            int columns = 0;
-            int children = getChildCount();
-            if (children > 0) {
-                int width = getChildAt(0).getMeasuredWidth();
-                if (width > 0) {
-                    columns = getWidth() / width;
+            try {
+                Field numColumns = getClass().getSuperclass().getDeclaredField("mNumColumns");
+                numColumns.setAccessible(true);
+                return numColumns.getInt(this);
+            } catch (Exception e) {
+                if (mNumColumns != -1) {
+                    return mNumColumns;
                 }
+                return 1;
             }
-            return columns > 0 ? columns : AUTO_FIT;
         }
     }
 
@@ -300,6 +311,16 @@ public class GridViewWithHeaderAndFooter extends GridView {
         }
     }
 
+    @Override
+    public void setNumColumns(int numColumns) {
+        super.setNumColumns(numColumns);
+        mNumColumns = numColumns;
+        ListAdapter adapter = getAdapter();
+        if (adapter != null && adapter instanceof HeaderViewGridAdapter) {
+            ((HeaderViewGridAdapter) adapter).setNumColumns(numColumns);
+        }
+    }
+
     /**
      * ListAdapter used when a HeaderGridView has header views. This ListAdapter
      * wraps another one and also keeps track of the header views and their
@@ -342,7 +363,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
 
         public void setNumColumns(int numColumns) {
             if (numColumns < 1) {
-                throw new IllegalArgumentException("Number of columns must be 1 or more");
+                return;
             }
             if (mNumColumns != numColumns) {
                 mNumColumns = numColumns;
@@ -547,6 +568,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
                     }
                 }
             }
+            // Footer
             final int footerPosition = adjPosition - adapterCount;
             if (footerPosition < getCount()) {
                 View footViewContainer = mFooterViewInfos
