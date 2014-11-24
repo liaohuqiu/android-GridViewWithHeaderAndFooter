@@ -11,14 +11,14 @@
     <groupId>in.srain.cube</groupId>
     <artifactId>grid-view-with-header-footer</artifactId>
     <type>jar</type>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
 </dependency>
 ```
 
 #### Gradle
 
 ``` groovy
-compile 'in.srain.cube:grid-view-with-header-footer:1.0.6'
+compile 'in.srain.cube:grid-view-with-header-footer:1.0.7'
 ```
 
 ### Usage

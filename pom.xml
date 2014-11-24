@@ -4,23 +4,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
+        <groupId>in.srain</groupId>
+        <artifactId>cube-parent-for-oss</artifactId>
+        <version>1.0.1</version>
     </parent>
-    <!--
-    <parent>
-        <groupId>com.taobao</groupId>
-        <artifactId>parent</artifactId>
-        <version>1.0.2</version>
-    </parent>
-    -->
 
     <groupId>in.srain.cube</groupId>
     <artifactId>grid-view-with-header-footer</artifactId>
     <packaging>jar</packaging>
     <name>GridViewWithHeaderAndFooter</name>
-    <version>1.0.6</version>
+    <version>1.0.8</version>
 
     <description>GridView with Header and Footer</description>
     <url>https://github.com/liaohuqiu/android-GridViewWithHeaderAndFooter</url>
@@ -38,6 +31,12 @@
             <artifactId>android</artifactId>
             <version>4.1.1.4</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

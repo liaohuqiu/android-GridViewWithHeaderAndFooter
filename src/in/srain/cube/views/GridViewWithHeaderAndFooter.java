@@ -20,6 +20,7 @@ import android.database.DataSetObservable;
 import android.database.DataSetObserver;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -35,12 +36,7 @@ import java.util.ArrayList;
  */
 public class GridViewWithHeaderAndFooter extends GridView {
 
-    /**
-     * This view holder will be set to be a tag of a place holder view to indicate that this view is a place holder view.
-     */
-    private static class ViewHolderTagForPlaceHolderView {
-
-    }
+    public static boolean DEBUG = false;
 
     /**
      * A class that represents a fixed view in a list, for example a header at the top
@@ -63,12 +59,14 @@ public class GridViewWithHeaderAndFooter extends GridView {
     }
 
     private int mNumColumns = AUTO_FIT;
+    private View mViewForMeasureRowHeight = null;
+    private int mRowHeight = -1;
+    private static final String LOG_TAG = "grid-view-with-header-and-footer";
 
     private ArrayList<FixedViewInfo> mHeaderViewInfos = new ArrayList<FixedViewInfo>();
     private ArrayList<FixedViewInfo> mFooterViewInfos = new ArrayList<FixedViewInfo>();
 
     private void initHeaderGridView() {
-        super.setClipChildren(false);
     }
 
     public GridViewWithHeaderAndFooter(Context context) {
@@ -92,12 +90,22 @@ public class GridViewWithHeaderAndFooter extends GridView {
         ListAdapter adapter = getAdapter();
         if (adapter != null && adapter instanceof HeaderViewGridAdapter) {
             ((HeaderViewGridAdapter) adapter).setNumColumns(getNumColumnsCompatible());
+            ((HeaderViewGridAdapter) adapter).setRowHeight(getRowHeight());
         }
     }
 
     @Override
     public void setClipChildren(boolean clipChildren) {
         // Ignore, since the header rows depend on not being clipped
+    }
+
+    /**
+     * Do not call this method unless you know how it works.
+     *
+     * @param clipChildren
+     */
+    public void setClipChildrenSupper(boolean clipChildren) {
+        super.setClipChildren(false);
     }
 
     /**
@@ -258,9 +266,63 @@ public class GridViewWithHeaderAndFooter extends GridView {
                 if (mNumColumns != -1) {
                     return mNumColumns;
                 }
-                return 1;
+                throw new RuntimeException("Can not determine the mNumColumns for this API platform, please call setNumColumns to set it.");
             }
         }
+    }
+
+    private int getColumnWidthCompatible() {
+        if (Build.VERSION.SDK_INT >= 16) {
+            return super.getColumnWidth();
+        } else {
+            try {
+                Field numColumns = getClass().getSuperclass().getDeclaredField("mColumnWidth");
+                numColumns.setAccessible(true);
+                return numColumns.getInt(this);
+            } catch (NoSuchFieldException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mViewForMeasureRowHeight = null;
+    }
+
+    public void invalidateRowHeight() {
+        mRowHeight = -1;
+    }
+
+    public int getRowHeight() {
+        if (mRowHeight > 0) {
+            return mRowHeight;
+        }
+        ListAdapter adapter = getAdapter();
+        int numColumns = getNumColumnsCompatible();
+
+        // adapter has not been set or has no views in it;
+        if (adapter == null || adapter.getCount() <= numColumns * (mHeaderViewInfos.size() + mFooterViewInfos.size())) {
+            return -1;
+        }
+        int mColumnWidth = getColumnWidthCompatible();
+        View view = getAdapter().getView(numColumns * mHeaderViewInfos.size(), mViewForMeasureRowHeight, this);
+        AbsListView.LayoutParams p = (AbsListView.LayoutParams) view.getLayoutParams();
+        if (p == null) {
+            p = new AbsListView.LayoutParams(-1, -2, 0);
+            view.setLayoutParams(p);
+        }
+        int childHeightSpec = getChildMeasureSpec(
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), 0, p.height);
+        int childWidthSpec = getChildMeasureSpec(
+                MeasureSpec.makeMeasureSpec(mColumnWidth, MeasureSpec.EXACTLY), 0, p.width);
+        view.measure(childWidthSpec, childHeightSpec);
+        mViewForMeasureRowHeight = view;
+        mRowHeight = view.getMeasuredHeight();
+        return mRowHeight;
     }
 
     public void tryToScrollToBottomSmoothly() {
@@ -289,15 +351,30 @@ public class GridViewWithHeaderAndFooter extends GridView {
             if (numColumns > 1) {
                 headerViewGridAdapter.setNumColumns(numColumns);
             }
+            headerViewGridAdapter.setRowHeight(getRowHeight());
             super.setAdapter(headerViewGridAdapter);
         } else {
             super.setAdapter(adapter);
         }
     }
 
+    /**
+     * full width
+     */
     private class FullWidthFixedViewLayout extends FrameLayout {
+
         public FullWidthFixedViewLayout(Context context) {
             super(context);
+        }
+
+        @Override
+        protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+            int realLeft = getPaddingLeft();
+            // Try to make where it should be, from left, full width
+            if (realLeft != left) {
+                offsetLeftAndRight(realLeft - left);
+            }
+            super.onLayout(changed, left, top, right, bottom);
         }
 
         @Override
@@ -340,8 +417,12 @@ public class GridViewWithHeaderAndFooter extends GridView {
         ArrayList<FixedViewInfo> mHeaderViewInfos;
         ArrayList<FixedViewInfo> mFooterViewInfos;
         private int mNumColumns = 1;
+        private int mRowHeight = -1;
         boolean mAreAllFixedViewsSelectable;
         private final boolean mIsFilterable;
+        private boolean mCachePlaceHoldView = true;
+        // From Recycle Bin or calling getView, this a question...
+        private boolean mCacheFirstHeaderView = false;
 
         public HeaderViewGridAdapter(ArrayList<FixedViewInfo> headerViewInfos, ArrayList<FixedViewInfo> footViewInfos, ListAdapter adapter) {
             mAdapter = adapter;
@@ -369,6 +450,10 @@ public class GridViewWithHeaderAndFooter extends GridView {
                 mNumColumns = numColumns;
                 notifyDataSetChanged();
             }
+        }
+
+        public void setRowHeight(int height) {
+            mRowHeight = height;
         }
 
         public int getHeadersCount() {
@@ -528,6 +613,9 @@ public class GridViewWithHeaderAndFooter extends GridView {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            if (DEBUG) {
+                Log.d(LOG_TAG, String.format("getView: %s, reused: %s", position, convertView == null));
+            }
             // Header (negative positions will throw an ArrayIndexOutOfBoundsException)
             int numHeadersAndPlaceholders = getHeadersCount() * mNumColumns;
             if (position < numHeadersAndPlaceholders) {
@@ -554,16 +642,13 @@ public class GridViewWithHeaderAndFooter extends GridView {
                 if (adjPosition < adapterCount) {
                     if (adjPosition < mAdapter.getCount()) {
                         View view = mAdapter.getView(adjPosition, convertView, parent);
-                        view.setVisibility(VISIBLE);
                         return view;
                     } else {
-                        int lastPos = mAdapter.getCount() - 1;
-                        View view = mAdapter.getView(lastPos, convertView, parent);
                         if (convertView == null) {
                             convertView = new View(parent.getContext());
                         }
                         convertView.setVisibility(View.INVISIBLE);
-                        convertView.setMinimumHeight(view.getHeight());
+                        convertView.setMinimumHeight(mRowHeight);
                         return convertView;
                     }
                 }
@@ -576,7 +661,9 @@ public class GridViewWithHeaderAndFooter extends GridView {
                 if (position % mNumColumns == 0) {
                     return footViewContainer;
                 } else {
-                    convertView = new View(parent.getContext());
+                    if (convertView == null) {
+                        convertView = new View(parent.getContext());
+                    }
                     // We need to do this because GridView uses the height of the last item
                     // in a row to determine the height for the entire row.
                     convertView.setVisibility(View.INVISIBLE);
@@ -590,27 +677,71 @@ public class GridViewWithHeaderAndFooter extends GridView {
         @Override
         public int getItemViewType(int position) {
 
-            int numHeadersAndPlaceholders = getHeadersCount() * mNumColumns;
-            if (position < numHeadersAndPlaceholders && (position % mNumColumns != 0)) {
-                // Placeholders get the last view type number
-                return mAdapter != null ? mAdapter.getViewTypeCount() : 1;
-            }
-            if (mAdapter != null && position >= numHeadersAndPlaceholders) {
-                int adjPosition = position - numHeadersAndPlaceholders;
-                int adapterCount = getAdapterAndPlaceHolderCount();
-                if (adjPosition < adapterCount) {
-                    return mAdapter.getItemViewType(adjPosition);
+            final int numHeadersAndPlaceholders = getHeadersCount() * mNumColumns;
+            final int adapterViewTypeStart = mAdapter == null ? 0 : mAdapter.getViewTypeCount() - 1;
+            int type = AdapterView.ITEM_VIEW_TYPE_HEADER_OR_FOOTER;
+            if (mCachePlaceHoldView) {
+                // Header
+                if (position < numHeadersAndPlaceholders) {
+                    if (position == 0) {
+                        if (mCacheFirstHeaderView) {
+                            type = adapterViewTypeStart + mHeaderViewInfos.size() + mFooterViewInfos.size() + 1 + 1;
+                        }
+                    }
+                    if (position % mNumColumns != 0) {
+                        type = adapterViewTypeStart + (position / mNumColumns + 1);
+                    }
                 }
             }
-            return AdapterView.ITEM_VIEW_TYPE_HEADER_OR_FOOTER;
+
+            // Adapter
+            final int adjPosition = position - numHeadersAndPlaceholders;
+            int adapterCount = 0;
+            if (mAdapter != null) {
+                adapterCount = getAdapterAndPlaceHolderCount();
+                if (adjPosition >= 0 && adjPosition < adapterCount) {
+                    if (adjPosition < mAdapter.getCount()) {
+                        type = mAdapter.getItemViewType(adjPosition);
+                    } else {
+                        if (mCachePlaceHoldView) {
+                            type = adapterViewTypeStart + mHeaderViewInfos.size() + 1;
+                        }
+                    }
+                }
+            }
+
+            if (mCachePlaceHoldView) {
+                // Footer
+                final int footerPosition = adjPosition - adapterCount;
+                if (footerPosition >= 0 && footerPosition < getCount() && (footerPosition % mNumColumns) != 0) {
+                    type = adapterViewTypeStart + mHeaderViewInfos.size() + 1 + (footerPosition / mNumColumns + 1);
+                }
+            }
+            if (DEBUG) {
+                Log.d(LOG_TAG, String.format("getItemViewType: pos: %s, result: %s", position, type, mCachePlaceHoldView, mCacheFirstHeaderView));
+            }
+            return type;
         }
 
+        /**
+         * content view, content view holder, header[0], header and footer placeholder(s)
+         *
+         * @return
+         */
         @Override
         public int getViewTypeCount() {
-            if (mAdapter != null) {
-                return mAdapter.getViewTypeCount() + 1;
+            int count = mAdapter == null ? 1 : mAdapter.getViewTypeCount();
+            if (mCachePlaceHoldView) {
+                int offset = mHeaderViewInfos.size() + 1 + mFooterViewInfos.size();
+                if (mCacheFirstHeaderView) {
+                    offset += 1;
+                }
+                count += offset;
             }
-            return 2;
+            if (DEBUG) {
+                Log.d(LOG_TAG, String.format("getViewTypeCount: %s", count));
+            }
+            return count;
         }
 
         @Override
