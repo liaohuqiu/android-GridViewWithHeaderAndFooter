@@ -15,6 +15,7 @@
  */
 package in.srain.cube.views;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.DataSetObservable;
 import android.database.DataSetObserver;
@@ -254,8 +255,9 @@ public class GridViewWithHeaderAndFooter extends GridView {
         }
     }
 
+    @TargetApi(11)
     private int getNumColumnsCompatible() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (Build.VERSION.SDK_INT >= 11) {
             return super.getNumColumns();
         } else {
             try {
@@ -271,6 +273,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
         }
     }
 
+    @TargetApi(16)
     private int getColumnWidthCompatible() {
         if (Build.VERSION.SDK_INT >= 16) {
             return super.getColumnWidth();
@@ -325,6 +328,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
         return mRowHeight;
     }
 
+    @TargetApi(11)
     public void tryToScrollToBottomSmoothly() {
         int lastPos = getAdapter().getCount() - 1;
         if (Build.VERSION.SDK_INT >= 11) {
@@ -334,6 +338,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
         }
     }
 
+    @TargetApi(11)
     public void tryToScrollToBottomSmoothly(int duration) {
         int lastPos = getAdapter().getCount() - 1;
         if (Build.VERSION.SDK_INT >= 11) {
@@ -369,7 +374,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
 
         @Override
         protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-            int realLeft = getPaddingLeft();
+            int realLeft = GridViewWithHeaderAndFooter.this.getPaddingLeft() + getPaddingLeft();
             // Try to make where it should be, from left, full width
             if (realLeft != left) {
                 offsetLeftAndRight(realLeft - left);
