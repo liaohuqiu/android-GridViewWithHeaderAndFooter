@@ -4,6 +4,8 @@
 
 ![Screen Shot](https://raw.githubusercontent.com/liaohuqiu/android-GridViewWithHeaderAndFooter/master/screen-shot.png)
 
+This library is contained by `CUBE-SDK`: https://github.com/etao-open-source/cube-sdk. The Demo is HERE: https://github.com/liaohuqiu/android-cube-app . 
+
 #### Maven
 
 ```xml
