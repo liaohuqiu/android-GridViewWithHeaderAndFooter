@@ -300,6 +300,14 @@ public class GridViewWithHeaderAndFooter extends GridView {
         mRowHeight = -1;
     }
 
+    public int getHeaderHeight(int row) {
+        if (row >= 0) {
+            return mHeaderViewInfos.get(row).view.getMeasuredHeight();
+        }
+
+        return 0;
+    }
+
     public int getRowHeight() {
         if (mRowHeight > 0) {
             return mRowHeight;
