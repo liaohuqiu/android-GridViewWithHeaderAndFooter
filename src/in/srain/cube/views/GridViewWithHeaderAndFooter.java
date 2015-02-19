@@ -308,6 +308,48 @@ public class GridViewWithHeaderAndFooter extends GridView {
         return 0;
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public int getVerticalSpacing(){
+        int value = 0;
+
+        try {
+            int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+            if (currentapiVersion < Build.VERSION_CODES.JELLY_BEAN){
+                Field field = this.getClass().getSuperclass().getDeclaredField("mVerticalSpacing");
+                field.setAccessible(true);
+                value = field.getInt(this);
+            } else{
+                value = super.getVerticalSpacing();
+            }
+
+        }catch (Exception ex){
+
+        }
+
+        return value;
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public int getHorizontalSpacing(){
+        int value = 0;
+
+        try {
+            int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+            if (currentapiVersion < Build.VERSION_CODES.JELLY_BEAN){
+                Field field = this.getClass().getSuperclass().getDeclaredField("mHorizontalSpacing");
+                field.setAccessible(true);
+                value = field.getInt(this);
+            } else{
+                value = super.getHorizontalSpacing();
+            }
+
+        }catch (Exception ex){
+
+        }
+
+        return value;
+    }
+
     public int getRowHeight() {
         if (mRowHeight > 0) {
             return mRowHeight;
