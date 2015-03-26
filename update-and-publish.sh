@@ -1,2 +1,2 @@
 python update-project.py
-mvn deploy
+./gradlew clean :uploadArchives

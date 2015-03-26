@@ -7,6 +7,7 @@ files = [
         'README.md',
         'README-cn.md',
         'pom.xml',
+        'gradle.properties'
         ]
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
