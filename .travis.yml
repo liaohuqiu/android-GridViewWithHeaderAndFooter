@@ -1,0 +1,11 @@
+language: android
+
+android:
+  components:
+    - build-tools-20.0.0
+    - android-19
+
+jdk: oraclejdk7
+
+script:
+    - ./gradlew check

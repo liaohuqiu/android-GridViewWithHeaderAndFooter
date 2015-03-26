@@ -1,8 +1,10 @@
+#### [中文版文档](https://github.com/liaohuqiu/android-GridViewWithHeaderAndFooter/blob/master/README-cn.md)
+
 ### GridView with Header and Footer
 
 ![Screen Shot](https://raw.githubusercontent.com/liaohuqiu/android-GridViewWithHeaderAndFooter/master/screen-shot.png)
 
-只有一个文件，你可以将源代码放入你的项目中。另外项目发布到了Maven中央库，你可以通过`pom`或者`gradle`引入。
+This library is contained by `CUBE-SDK`: https://github.com/etao-open-source/cube-sdk. The Demo is HERE: https://github.com/liaohuqiu/android-cube-app . 
 
 #### Maven
 
@@ -11,17 +13,17 @@
     <groupId>in.srain.cube</groupId>
     <artifactId>grid-view-with-header-footer</artifactId>
     <type>jar</type>
-    <version>1.0.10</version>
+    <version>{lib_version}</version>
 </dependency>
 ```
 
 #### Gradle
 
 ``` groovy
-compile 'in.srain.cube:grid-view-with-header-footer:1.0.10'
+compile 'in.srain.cube:grid-view-with-header-footer:{lib_version}'
 ```
 
-### 使用示例
+### Usage
 
 ```java
 GridViewWithHeaderAndFooter gridView = (GridViewWithHeaderAndFooter) v.findViewById(R.id.ly_image_list_grid);
@@ -41,11 +43,11 @@ gridView.addFooterView(footerView);
 
 Apache 2
 
-### 联系方式 / 帮助支持
+### contact or help
 
 Please fell free to contact me if there is any problem when using the library.
 
 * srain@php.net
 * twitter: https://twitter.com/liaohuqiu
-* 微博: http://weibo.com/liaohuqiu
-* QQ 群: 271918140
+* weibo: http://weibo.com/liaohuqiu
+* QQ tribe: 271918140

@@ -1,4 +1,4 @@
-## [中文版文档](https://github.com/liaohuqiu/android-GridViewWithHeaderAndFooter/blob/master/README-cn.md)
+#### [中文版文档](https://github.com/liaohuqiu/android-GridViewWithHeaderAndFooter/blob/master/README-cn.md)
 
 ### GridView with Header and Footer
 
@@ -13,14 +13,14 @@ This library is contained by `CUBE-SDK`: https://github.com/etao-open-source/cub
     <groupId>in.srain.cube</groupId>
     <artifactId>grid-view-with-header-footer</artifactId>
     <type>jar</type>
-    <version>1.0.9</version>
+    <version>1.0.10</version>
 </dependency>
 ```
 
 #### Gradle
 
 ``` groovy
-compile 'in.srain.cube:grid-view-with-header-footer:1.0.9'
+compile 'in.srain.cube:grid-view-with-header-footer:1.0.10'
 ```
 
 ### Usage
@@ -33,33 +33,6 @@ View headerView = layoutInflater.inflate(R.layout.test_header_view, null);
 View footerView = layoutInflater.inflate(R.layout.test_footer_view, null);
 gridView.addHeaderView(headerView);
 gridView.addFooterView(footerView);
-```
-
-#### When scroll to bottom to load more data for GridView
-
-since 1.0.4
-
-```
-public void tryToScrollToBottomSmoothly();
-public void tryToScrollToBottomSmoothly(int duration);
-```
-
-When scroll to the bottom, you may need to show the footer view when loading data from server.
-
-```java
-mFooterView.setVisibility(View.VISIBLE);
-mGridView.post(new Runnable() {
-    @Override
-    public void run() {
-        mGridView.tryToScrollToBottomSmoothly(100);
-    }
-});
-mGridView.postDelay(new Runnable() {
-    @Override
-    public void run() {
-    // load more data
-    }
-}, 150);
 ```
 
 ### Thanks
