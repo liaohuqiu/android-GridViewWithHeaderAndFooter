@@ -279,7 +279,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
             return super.getColumnWidth();
         } else {
             try {
-                Field numColumns = getClass().getSuperclass().getDeclaredField("mColumnWidth");
+                Field numColumns = GridView.class.getDeclaredField("mColumnWidth");
                 numColumns.setAccessible(true);
                 return numColumns.getInt(this);
             } catch (NoSuchFieldException e) {
@@ -315,7 +315,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
         try {
             int currentapiVersion = android.os.Build.VERSION.SDK_INT;
             if (currentapiVersion < Build.VERSION_CODES.JELLY_BEAN){
-                Field field = this.getClass().getSuperclass().getDeclaredField("mVerticalSpacing");
+                Field field = GridView.class.getDeclaredField("mVerticalSpacing");
                 field.setAccessible(true);
                 value = field.getInt(this);
             } else{
@@ -336,7 +336,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
         try {
             int currentapiVersion = android.os.Build.VERSION.SDK_INT;
             if (currentapiVersion < Build.VERSION_CODES.JELLY_BEAN){
-                Field field = this.getClass().getSuperclass().getDeclaredField("mHorizontalSpacing");
+                Field field = GridView.class.getDeclaredField("mHorizontalSpacing");
                 field.setAccessible(true);
                 value = field.getInt(this);
             } else{
