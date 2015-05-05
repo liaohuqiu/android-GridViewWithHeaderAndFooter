@@ -1,3 +1,11 @@
+###### [关注我的GitHub吧，江湖救急，需要你的支持和帮助](http://www.liaohuqiu.net/cn/posts/follow-me-on-github/)
+
+Github: https://github.com/liaohuqiu
+
+微博: http://weibo.com/liaohuqiu
+
+---
+
 ### GridView with Header and Footer
 
 ![Screen Shot](https://raw.githubusercontent.com/liaohuqiu/android-GridViewWithHeaderAndFooter/master/screen-shot.png)
