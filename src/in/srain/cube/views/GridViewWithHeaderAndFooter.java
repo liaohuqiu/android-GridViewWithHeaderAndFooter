@@ -64,7 +64,8 @@ public class GridViewWithHeaderAndFooter extends GridView implements android.wid
     private int mNumColumns = AUTO_FIT;
     private View mViewForMeasureRowHeight = null;
     private int mRowHeight = -1;
-    private static final String LOG_TAG = "grid-view-with-header-and-footer";
+    //log tag can be at most 23 characters
+    private static final String LOG_TAG = "GridViewHeaderAndFooter";
 
     private ArrayList<FixedViewInfo> mHeaderViewInfos = new ArrayList<FixedViewInfo>();
     private ArrayList<FixedViewInfo> mFooterViewInfos = new ArrayList<FixedViewInfo>();
@@ -839,7 +840,7 @@ public class GridViewWithHeaderAndFooter extends GridView implements android.wid
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (mOnItemClickListener != null) {
-            int resPos = position - getHeaderViewCount() * getNumColumnsCompat();
+            int resPos = position - getHeaderViewCount() * getNumColumnsCompatible();
             if (resPos >= 0) {
                 mOnItemClickListener.onItemClick(parent, view, resPos, id);
             }
@@ -849,32 +850,11 @@ public class GridViewWithHeaderAndFooter extends GridView implements android.wid
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         if (mOnItemLongClickListener != null) {
-            int resPos = position - getHeaderViewCount() * getNumColumnsCompat();
+            int resPos = position - getHeaderViewCount() * getNumColumnsCompatible();
             if (resPos >= 0) {
                 mOnItemLongClickListener.onItemLongClick(parent, view, resPos, id);
             }
         }
         return true;
     }
-
-    private int getNumColumnsCompat() {
-        if (Build.VERSION.SDK_INT >= 11) {
-            return getNumColumnsCompatFrom11();
-
-        } else {
-            try {
-                Field numColumns = getClass().getSuperclass().getDeclaredField("mNumColumns");
-                numColumns.setAccessible(true);
-                return numColumns.getInt(this);
-            } catch (Exception e) {
-                return 1;
-            }
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private int getNumColumnsCompatFrom11() {
-        return getNumColumns();
-    }
-
 }
