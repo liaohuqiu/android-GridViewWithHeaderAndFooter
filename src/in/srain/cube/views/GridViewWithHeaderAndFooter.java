@@ -66,6 +66,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
 
     private ArrayList<FixedViewInfo> mHeaderViewInfos = new ArrayList<FixedViewInfo>();
     private ArrayList<FixedViewInfo> mFooterViewInfos = new ArrayList<FixedViewInfo>();
+    private ListAdapter mOriginalAdapter;
 
     private void initHeaderGridView() {
     }
@@ -400,6 +401,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
 
     @Override
     public void setAdapter(ListAdapter adapter) {
+        mOriginalAdapter = adapter;
         if (mHeaderViewInfos.size() > 0 || mFooterViewInfos.size() > 0) {
             HeaderViewGridAdapter headerViewGridAdapter = new HeaderViewGridAdapter(mHeaderViewInfos, mFooterViewInfos, adapter);
             int numColumns = getNumColumnsCompatible();
@@ -411,6 +413,14 @@ public class GridViewWithHeaderAndFooter extends GridView {
         } else {
             super.setAdapter(adapter);
         }
+    }
+
+    /**
+     * Return original adapter for convenience.
+     * @return
+     */
+    public ListAdapter getOriginalAdapter() {
+        return mOriginalAdapter;
     }
 
     /**
