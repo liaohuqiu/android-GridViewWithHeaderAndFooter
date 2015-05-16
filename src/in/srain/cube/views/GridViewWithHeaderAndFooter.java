@@ -519,9 +519,15 @@ public class GridViewWithHeaderAndFooter extends GridView {
             return mFooterViewInfos.size();
         }
 
+        /**
+         * @return true if this adapter doesn't contain any data.  This is used to determine
+         * whether the empty view should be displayed.  A typical implementation will return
+         * getCount() == 0 but since getCount() includes the headers and footers, specialized
+         * adapters might want a different behavior.
+         */
         @Override
         public boolean isEmpty() {
-            return (mAdapter == null || mAdapter.isEmpty()) && getHeadersCount() == 0 && getFootersCount() == 0;
+            return (mAdapter == null || mAdapter.isEmpty());
         }
 
         private boolean areAllListInfosSelectable(ArrayList<FixedViewInfo> infos) {
