@@ -21,14 +21,14 @@ This library is contained by `CUBE-SDK`: https://github.com/etao-open-source/cub
     <groupId>in.srain.cube</groupId>
     <artifactId>grid-view-with-header-footer</artifactId>
     <type>jar</type>
-    <version>1.0.11</version>
+    <version>1.0.12</version>
 </dependency>
 ```
 
 #### Gradle
 
 ``` groovy
-compile 'in.srain.cube:grid-view-with-header-footer:1.0.11'
+compile 'in.srain.cube:grid-view-with-header-footer:1.0.12'
 ```
 
 ### Usage

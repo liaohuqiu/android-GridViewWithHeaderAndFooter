@@ -35,7 +35,7 @@ import java.util.ArrayList;
  * See {@link GridViewWithHeaderAndFooter#addHeaderView(View, Object, boolean)}
  * See {@link GridViewWithHeaderAndFooter#addFooterView(View, Object, boolean)}
  */
-public class GridViewWithHeaderAndFooter extends GridView implements android.widget.AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+public class GridViewWithHeaderAndFooter extends GridView {
 
     public static boolean DEBUG = false;
     private OnItemClickListener mOnItemClickListener;
@@ -70,6 +70,7 @@ public class GridViewWithHeaderAndFooter extends GridView implements android.wid
     private ArrayList<FixedViewInfo> mHeaderViewInfos = new ArrayList<FixedViewInfo>();
     private ArrayList<FixedViewInfo> mFooterViewInfos = new ArrayList<FixedViewInfo>();
     private ListAdapter mOriginalAdapter;
+    private ItemClickHandler mItemClickHandler;
 
     private void initHeaderGridView() {
     }
@@ -418,6 +419,7 @@ public class GridViewWithHeaderAndFooter extends GridView implements android.wid
 
     /**
      * Return original adapter for convenience.
+     *
      * @return
      */
     public ListAdapter getOriginalAdapter() {
@@ -844,33 +846,43 @@ public class GridViewWithHeaderAndFooter extends GridView implements android.wid
     @Override
     public void setOnItemClickListener(OnItemClickListener l) {
         mOnItemClickListener = l;
-        super.setOnItemClickListener(this);
+        super.setOnItemClickListener(getItemClickHandler());
     }
 
     @Override
     public void setOnItemLongClickListener(OnItemLongClickListener listener) {
         mOnItemLongClickListener = listener;
-        super.setOnItemLongClickListener(this);
+        super.setOnItemLongClickListener(getItemClickHandler());
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (mOnItemClickListener != null) {
-            int resPos = position - getHeaderViewCount() * getNumColumnsCompatible();
-            if (resPos >= 0) {
-                mOnItemClickListener.onItemClick(parent, view, resPos, id);
-            }
+    private ItemClickHandler getItemClickHandler() {
+        if (mItemClickHandler == null) {
+            mItemClickHandler = new ItemClickHandler();
         }
+        return mItemClickHandler;
     }
 
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        if (mOnItemLongClickListener != null) {
-            int resPos = position - getHeaderViewCount() * getNumColumnsCompatible();
-            if (resPos >= 0) {
-                mOnItemLongClickListener.onItemLongClick(parent, view, resPos, id);
+    private class ItemClickHandler implements android.widget.AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if (mOnItemClickListener != null) {
+                int resPos = position - getHeaderViewCount() * getNumColumnsCompatible();
+                if (resPos >= 0) {
+                    mOnItemClickListener.onItemClick(parent, view, resPos, id);
+                }
             }
         }
-        return true;
+
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            if (mOnItemLongClickListener != null) {
+                int resPos = position - getHeaderViewCount() * getNumColumnsCompatible();
+                if (resPos >= 0) {
+                    mOnItemLongClickListener.onItemLongClick(parent, view, resPos, id);
+                }
+            }
+            return true;
+        }
     }
 }
