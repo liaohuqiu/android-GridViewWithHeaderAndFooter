@@ -697,6 +697,9 @@ public class GridViewWithHeaderAndFooter extends GridView {
                     // in a row to determine the height for the entire row.
                     convertView.setVisibility(View.INVISIBLE);
                     convertView.setMinimumHeight(headerViewContainer.getHeight());
+                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1){
+                        convertView.requestLayout();
+                    }
                     return convertView;
                 }
             }
@@ -733,6 +736,9 @@ public class GridViewWithHeaderAndFooter extends GridView {
                     // in a row to determine the height for the entire row.
                     convertView.setVisibility(View.INVISIBLE);
                     convertView.setMinimumHeight(footViewContainer.getHeight());
+                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1){
+                        convertView.requestLayout();
+                    }
                     return convertView;
                 }
             }
